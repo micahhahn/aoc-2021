@@ -27,11 +27,21 @@ library:
 
 data-files:
   - day-1/input.txt
+  - day-2/input.txt
 
 executables:
   day-1:
     main:                Main.hs
     source-dirs:         day-1
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc
+  day-2:
+    main:                Main.hs
+    source-dirs:         day-2
     ghc-options:
     - -threaded
     - -rtsopts
