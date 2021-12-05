@@ -18,6 +18,8 @@ build-type:     Simple
 extra-source-files:
     README.md
     ChangeLog.md
+data-files:
+    day-1/input.txt
 
 source-repository head
   type: git
@@ -34,12 +36,12 @@ library
       base >=4.7 && <5
   default-language: Haskell2010
 
-executable aoc-exe
+executable day-1
   main-is: Main.hs
   other-modules:
       Paths_aoc
   hs-source-dirs:
-      app
+      day-1
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc
