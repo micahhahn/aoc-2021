@@ -1,11 +1,12 @@
 module Main where
 
+import Data.List (foldl')
 import Data.Functor ((<&>))
 import Lib
 import System.IO
 import qualified Paths_aoc as Paths
 
-loadValues = Paths.getDataFileName "day-2/input.txt" >>= readFile <&> lines
+loadCommands = Paths.getDataFileName "day-2/input.txt" >>= readFile <&> fmap (read :: String -> Command) . lines
 
 data Command = Forward Int
              | Up Int
@@ -30,8 +31,23 @@ part1 = foldr (\command (horiz, depth) -> case command of
                 Down x -> (horiz, depth + x)
               ) (0, 0)
 
+data State2 = State2 { horiz :: Int, depth :: Int, aim :: Int }
+    deriving (Show)
+
+part2 :: [Command] -> State2
+part2 = foldl' (\(State2 horiz depth aim) command -> case command of
+                Forward x -> State2 (horiz + x) (depth + (aim * x)) aim 
+                Up x -> State2 horiz depth (aim - x)
+                Down x -> State2 horiz depth (aim + x)
+              ) (State2 0 0 0)
+
+example = [Forward 5, Down 5, Forward 8, Up 3, Down 8, Forward 2]
+
 main :: IO Int
 main = do
-    values <- loadValues
-    let (horiz, depth) = part1 $ fmap (read :: String -> Command) values
-    return $ horiz * depth
+    commands <- loadCommands
+    let (horiz, depth) = part1 commands
+    let result1 = horiz * depth
+    let (State2 horiz2 depth2 aim2) = part2 commands
+    let result2 = horiz2 * depth2
+    return $ result2
